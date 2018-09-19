@@ -69,4 +69,11 @@ class ReportController extends Controller
 
         return $report;
     }
+
+    public function delete($id){
+        $report = Report::findOrFail($id);
+        $report->fields()->detach();
+        $report->rules()->detach();
+        $report->delete();
+    }
 }

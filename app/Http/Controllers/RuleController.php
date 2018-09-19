@@ -16,6 +16,10 @@ class RuleController extends Controller
         return $rule;
     }
 
+    public function index($model){
+        return Rule::where('model', $model)->get();
+    }
+
     public function save(){
 
         request()->validate([
@@ -39,5 +43,11 @@ class RuleController extends Controller
         }
 
         return $rule;
+    }
+
+    public function delete($id){
+        $rule = Rule::findOrFail($id);
+        $rule->conditions()->delete();
+        $rule->delete();
     }
 }
