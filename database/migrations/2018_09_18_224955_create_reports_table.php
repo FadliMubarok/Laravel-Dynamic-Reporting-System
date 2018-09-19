@@ -17,6 +17,8 @@ class CreateReportsTable extends Migration
             $table->increments('id');
             $table->string('model');
             $table->string('name');
+            $table->string('sort_field_id')->nullable();
+            $table->string('sort_direction')->nullable();
             $table->timestamps();
         });
     }

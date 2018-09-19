@@ -8,7 +8,18 @@ use App\Rule;
 
 class RuleController extends Controller
 {
-    private $types = ['ends_with', 'year_equal'];
+    private $types = [
+        'equals',
+        'contains',
+        'starts_with',
+        'ends_with',
+        'less_then',
+        'less_then_or_equal',
+        'greater_then',
+        'greater_then_or_equal',
+        'year_equal',
+        'month_equal'
+    ];
 
     public function show($id){
         $rule = Rule::findOrFail($id);
