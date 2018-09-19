@@ -7,11 +7,45 @@ use App\Report;
 
 class ReportController extends Controller
 {
-    public function get($id){
+    public function index(){
+        return Report::get();
+    }
+
+    public function show($id){
         $report = Report::findOrFail($id);
         $report->load('fields:fields.id,fields.label');
-        $report->load('rules');
+        $report->load('rules.conditions.field:fields.id,fields.label');
         return $report;
+    }
+
+    public function data($id){
+        $report = Report::findOrFail($id);
+
+        $model = "App\\{$report->model}";
+        if(!class_exists($model)){
+            return response()->json(['error' => 'model_unavailable'], 500);
+        }
+
+        $fields = $report->fields->pluck('name')->toArray();
+        $query = $model::select($fields);
+
+        foreach($report->rules as $rule) {
+            $query->orWhere(function($query) use ($rule){
+                foreach($rule->conditions as $condition) {
+                    if($condition->type == 'ends_with'){
+                        $query->where($condition->field->name, 'like', "%{$condition->value}");
+                    }
+                    else if($condition->type == 'year_equal'){
+                        $query->whereYear($condition->field->name, '=', $condition->value);
+                    }
+                }
+            });
+        }
+
+        //dd($query->toSql());
+        $limit = request()->has('limit') ? request('limit') : 100;
+        $results = $query->paginate($limit);
+        return $results;
     }
 
     public function save(){
@@ -23,7 +57,9 @@ class ReportController extends Controller
             'rules' => 'array|exists:rules,id'
         ]);
 
-        $report = new Report;
+        $id = request('id');
+
+        $report = $id ? Report::Find($id) : new Report;
         $report->model = request('model');
         $report->name = request('name');
         if($report->save()){

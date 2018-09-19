@@ -13,7 +13,7 @@ class WebsitesTableSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-        foreach (range(1,100) as $index) {
+        foreach (range(1,1000) as $index) {
             DB::table('websites')->insert([
                 'name' => $faker->domainWord,
                 'domain' => $faker->domainName,

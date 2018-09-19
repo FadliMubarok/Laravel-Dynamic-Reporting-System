@@ -17,8 +17,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('models', 'FieldController@models');
-Route::get('model/{model}/fields', 'FieldController@fields');
+Route::get('models', 'ModelController@index');
+Route::get('models/{model}/fields', 'ModelController@show');
 
-Route::get('report/{id}', 'ReportController@get');
+Route::get('reports', 'ReportController@index');
+Route::get('reports/{id}', 'ReportController@show');
+Route::get('reports/{id}/data', 'ReportController@data');
 Route::post('reports', 'ReportController@save');
+
+Route::get('rules/{id}', 'RuleController@show');
+Route::post('rules', 'RuleController@save');

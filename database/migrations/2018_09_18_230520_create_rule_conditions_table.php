@@ -21,7 +21,6 @@ class CreateRuleConditionsTable extends Migration
             $table->string('value');
             $table->foreign('rule_id')->references('id')->on('rules');
             $table->foreign('field_id')->references('id')->on('fields');
-            $table->timestamps();
         });
     }
 

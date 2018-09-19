@@ -5,12 +5,12 @@ use App\Field;
 
 use Illuminate\Http\Request;
 
-class FieldController extends Controller
+class ModelController extends Controller
 {
-    public function models(){
+    public function index(){
         return Field::select('model')->groupBy('model')->get();
     }
-    public function fields($model){
+    public function show($model){
         return Field::where('model', $model)->get();
     }
 }
