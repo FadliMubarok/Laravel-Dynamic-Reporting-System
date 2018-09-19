@@ -9,7 +9,14 @@ use App\Report;
 class ReportController extends Controller
 {
     public function index(){
-        return Report::get();
+        $query = Report::select();
+        if(request('model')){
+            $query->where('model', request('model'));
+        }
+        if(request('name')){
+            $query->where('name', 'like', '%' . request('name') . '%');
+        }
+        return $query->paginate(request('limit', 100));
     }
 
     public function show($id){
@@ -92,7 +99,7 @@ class ReportController extends Controller
             'fields' => 'required|array|exists:fields,id',
             'rules' => 'array|exists:rules,id'
         ]);
-        
+
         $report = request('id') ? Report::Find(request('id')) : new Report;
         $report->model = request('model');
         $report->name = request('name');
