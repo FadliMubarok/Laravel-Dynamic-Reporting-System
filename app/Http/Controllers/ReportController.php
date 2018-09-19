@@ -92,10 +92,8 @@ class ReportController extends Controller
             'fields' => 'required|array|exists:fields,id',
             'rules' => 'array|exists:rules,id'
         ]);
-
-        $id = request('id');
-
-        $report = $id ? Report::Find($id) : new Report;
+        
+        $report = request('id') ? Report::Find(request('id')) : new Report;
         $report->model = request('model');
         $report->name = request('name');
         $report->sort_field_id = request('sort_field_id');

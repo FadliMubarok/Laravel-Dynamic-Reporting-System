@@ -31,13 +31,11 @@ class RuleController extends Controller
             'conditions.*.value' => 'required'
         ]);
 
-        $id = request('id');
-
-        $rule = $id ? Rule::Find($id) : new Rule;
+        $rule = request('id') ? Rule::Find(request('id')) : new Rule;
         $rule->name = request('name');
         $rule->model = request('model');
         if($rule->save()){
-            if($id) $rule->conditions()->delete();
+            $rule->conditions()->delete();
             $rule->conditions()->createMany(request('conditions'));
         }
 
@@ -51,7 +49,10 @@ class RuleController extends Controller
     }
 
     public function conditionTypes(){
-        $query = ConditionType::whereJsonContains('available_in', request('type'));
+        $query = ConditionType::select();
+        if(request('type')){
+            $query->whereJsonContains('available_in', request('type'));
+        }
         return $query->get();
     }
 }
