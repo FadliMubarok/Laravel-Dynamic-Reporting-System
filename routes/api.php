@@ -26,6 +26,7 @@ Route::get('reports/{id}/data', 'ReportController@data');
 Route::post('reports', 'ReportController@save');
 Route::delete('reports/{id}', 'ReportController@delete');
 
+Route::get('rules/condition/types', 'RuleController@conditionTypes');
 Route::get('models/{model}/rules', 'RuleController@index');
 Route::get('rules/{id}', 'RuleController@show');
 Route::post('rules', 'RuleController@save');

@@ -5,22 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule as ValidationRule;
 use App\Rule;
+use App\ConditionType;
 
 class RuleController extends Controller
 {
-    private $types = [
-        'equals',
-        'contains',
-        'starts_with',
-        'ends_with',
-        'less_then',
-        'less_then_or_equal',
-        'greater_then',
-        'greater_then_or_equal',
-        'year_equal',
-        'month_equal'
-    ];
-
     public function show($id){
         $rule = Rule::findOrFail($id);
         $rule->load('conditions');
@@ -39,7 +27,7 @@ class RuleController extends Controller
             'model' => 'required|exists:fields,model',
             'conditions' => 'required|array',
             'conditions.*.field_id' => 'required|exists:fields,id',
-            'conditions.*.type' => ['required', ValidationRule::in($this->types)],
+            'conditions.*.type' => 'required|exists:condition_types,name',
             'conditions.*.value' => 'required'
         ]);
 
@@ -60,5 +48,10 @@ class RuleController extends Controller
         $rule = Rule::findOrFail($id);
         $rule->conditions()->delete();
         $rule->delete();
+    }
+
+    public function conditionTypes(){
+        $query = ConditionType::whereJsonContains('available_in', request('type'));
+        return $query->get();
     }
 }

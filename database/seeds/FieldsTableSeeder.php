@@ -27,13 +27,13 @@ class FieldsTableSeeder extends Seeder
             'model' => 'website',
             'name' => 'created_at',
             'label' => 'Created at',
-            'type' => 'dateTime'
+            'type' => 'date'
         ]);
         DB::table('fields')->insert([
             'model' => 'website',
             'name' => 'updated_at',
             'label' => 'Updated at',
-            'type' => 'dateTime'
+            'type' => 'date'
         ]);
     }
 }
