@@ -19,3 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('models', 'FieldController@models');
 Route::get('model/{model}/fields', 'FieldController@fields');
+
+Route::get('report/{id}', 'ReportController@get');
+Route::post('reports', 'ReportController@save');
